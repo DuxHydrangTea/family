@@ -20,5 +20,6 @@ func (r *UserRoute) Register(router *gin.Engine) {
 	userGroup := router.Group("/users")
 	{
 		userGroup.GET("/", r.h.GetAll)
+		userGroup.POST("/upload-avatar", r.h.UploadAvatar)
 	}
 }

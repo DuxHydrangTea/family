@@ -4,5 +4,8 @@ import "family/internal/app"
 
 func main() {
 	application := app.NewApplication()
-	application.RunApp()
+	
+	if err := application.RunApp(); err != nil {
+		panic(err)
+	}
 }

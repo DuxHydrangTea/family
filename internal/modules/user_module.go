@@ -2,6 +2,7 @@ package modules
 
 import (
 	"family/internal/handlers"
+	"family/internal/providers"
 	"family/internal/repositories"
 	"family/internal/routes"
 	"family/internal/services"
@@ -16,8 +17,9 @@ type UserModule struct {
 func NewUserModule(
 	db *gorm.DB,
 ) *UserModule {
+	localStorage := providers.NewLocalProvider()
 	repo := repositories.NewUserRepository(db)
-	services := services.NewUserService(repo)
+	services := services.NewUserService(repo, localStorage)
 	handlers := handlers.NewUserHandler(services)
 	routes := routes.NewUserRoute(handlers)
 

@@ -36,8 +36,8 @@ func NewApplication() *Application {
 	}
 }
 
-func (a *Application) RunApp() {
-	a.App.Run("127.0.0.1:8080")
+func (a *Application) RunApp() error {
+	return a.App.Run("127.0.0.1:8080")
 }
 
 func GetModuleRoutes(modules []modules.Module) []routes.Route {
