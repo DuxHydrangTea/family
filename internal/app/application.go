@@ -3,7 +3,9 @@ package app
 import (
 	"family/internal/models"
 	"family/internal/modules"
+	"family/internal/providers"
 	"family/internal/routes"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -29,8 +31,11 @@ func NewApplication() *Application {
 
 	app.Static("/storage", "./storage")
 
+	uploadProvider := providers.NewS3Provider(LoadConfigR2())
+	// uploadProvider := providers.NewLocalProvider()
+
 	allModules := []modules.Module{
-		modules.NewUserModule(db),
+		modules.NewUserModule(db, uploadProvider),
 	}
 
 	routes.RegisterRoutes(app, GetModuleRoutes(allModules)...)
@@ -52,4 +57,15 @@ func GetModuleRoutes(modules []modules.Module) []routes.Route {
 	}
 
 	return routeList
+}
+
+func LoadConfigR2() *providers.S3Config {
+	return &providers.S3Config{
+		AccountId:   os.Getenv("R2_ACCOUNT_ID"),
+		AccessKey:   os.Getenv("R2_ACCESS_KEY"),
+		SecretKey:   os.Getenv("R2_SECRET_KEY"),
+		BucketName:  os.Getenv("R2_BUCKET_NAME"),
+		PublicUrl:   os.Getenv("R2_PUBLIC_URL"),
+		ApiEndpoint: os.Getenv("R2_API_END_POINT"),
+	}
 }

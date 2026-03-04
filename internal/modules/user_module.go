@@ -16,10 +16,10 @@ type UserModule struct {
 
 func NewUserModule(
 	db *gorm.DB,
+	uploadProvider providers.UploadProvider,
 ) *UserModule {
-	localStorage := providers.NewLocalProvider()
 	repo := repositories.NewUserRepository(db)
-	services := services.NewUserService(repo, localStorage)
+	services := services.NewUserService(repo, uploadProvider)
 	handlers := handlers.NewUserHandler(services)
 	routes := routes.NewUserRoute(handlers)
 
